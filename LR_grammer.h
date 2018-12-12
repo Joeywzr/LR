@@ -18,33 +18,40 @@ typedef struct DEDUCTION
 {
     string left;
     string right;
+    int pos;
 } DEDUCTION;
 class LR_grammer
 {
     //产生式
-    vector<DEDUCTION> deduction;
+    vector<DEDUCTION> deductions,item;
+
+    vector<vector<DEDUCTION>> dfa;
     //终结符集、非终结符集
     vector<string> nonterminal, terminal;
     //first集、follow集
     map<string, vector<string>> first, follow;
-    //起始符
-    string start;
+    //分析表的列坐标
+    map<char, int> table_coordinate;
+    //分析表
+    vector<vector<string>> analyze_table;
 
 public:
     //初始化
     void init(DEDUCTION &dd);
     //增广文法
-    void augmentating_grammer(DEDUCTION &dd);
-    //生成各非终结符的first集
-    void first_set();
+    void augmentating_grammer();
     //生成各非终结符的follow集
     void follow_set();
-    //获取first集
-    vector<string> get_first_set(string to_get_first);
     //获取follow集
     vector<string> get_follow_set(string to_get_follow);
-
+    //打印follow集
     void print_test();
+    //LR分析程序
+    void analyze_program(string text);
+    //处理输入文本
+    string text_process(string text);
+
+
 };
 
 

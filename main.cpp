@@ -5,11 +5,17 @@ int main()
 {
     LR_grammer lr;
     DEDUCTION dd;
+
     lr.init(dd);
-    cout << "ga";
-    lr.augmentating_grammer(dd);
+    lr.augmentating_grammer();
     lr.follow_set();
 
-    lr.print_test();
+    string text;
+    cout << "ÇëÊäÈë´ýÔ¤²â×Ö·û´®£º" << endl;
+    cin >> text;
+
+    text = lr.text_process(text);
+    lr.analyze_program(text);
+
     return 0;
 }
