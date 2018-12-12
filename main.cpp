@@ -6,16 +6,19 @@ int main()
     LR_grammer lr;
     DEDUCTION dd;
 
-    lr.init(dd);
-    lr.augmentating_grammer();
-    lr.follow_set();
+    lr.init(dd);//初始化
+    lr.augmentating_grammer();//增广文法
 
     string text;
-    cout << "请输入待预测字符串：" << endl;
+    cout << "请输入待预测字符串(输入#退出程序)：" << endl;
     cin >> text;
-
-    text = lr.text_process(text);
-    lr.analyze_program(text);
+    while (text != "#")
+    {
+        text = lr.text_process(text);//处理字符串
+        lr.analyze_program(text);//LR分析程序
+        cout << "\n\n请输入待预测字符串(输入#退出程序)：" << endl;
+        cin >> text;
+    }
 
     return 0;
 }

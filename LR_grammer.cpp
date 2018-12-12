@@ -4,7 +4,7 @@
 
 #include "LR_grammer.h"
 
-void LR_grammer::init(DEDUCTION &dd)
+void LR_grammer::init(DEDUCTION &dd)//初始化
 {
     nonterminal.emplace_back(" ");
     nonterminal.emplace_back("E");
@@ -42,199 +42,178 @@ void LR_grammer::init(DEDUCTION &dd)
     deductions.push_back(dd);
 
     analyze_table = {
-            {"ERR","ERR", "ERR", "ERR", "S4",  "ERR", "S5" , "ERR", "1",   "2",   "3"},
-            {"S6", "S7",  "ERR", "ERR", "ERR", "ERR", "ERR" ,"ACC", "ERR", "ERR", "ERR"},
-            {"R3", "R3",  "S8",  "S9",  "ERR", "R3",  "ERR", "R3",  "ERR", "ERR", "ERR"},
-            {"R6", "R6",  "R6",  "R6",  "ERR", "R6",  "ERR", "R6",  "ERR", "ERR", "ERR"},
-            {"ERR","ERR", "ERR", "ERR", "S4",  "ERR", "S5",  "ERR", "10",   "2",  "3"},
-            {"R8", "R8",  "R8",  "R8",  "ERR", "R8",  "ERR", "R8",  "ERR", "ERR", "ERR"},
-            {"ERR","ERR", "ERR", "ERR", "S4",  "ERR", "S5",  "ERR", "ERR", "11",  "3"},
-            {"ERR","ERR", "ERR", "ERR", "S4",  "ERR", "S5",  "ERR", "ERR", "12",  "3"},
-            {"ERR","ERR", "ERR", "ERR", "S4",  "ERR", "S5",  "ERR", "ERR", "ERR", "13"},
-            {"ERR","ERR", "ERR", "ERR", "S4",  "ERR", "S5",  "ERR", "ERR", "ERR", "14"},
-            {"S6", "S7",  "ERR", "ERR", "ERR", "S15", "ERR", "ERR", "ERR", "ERR", "ERR"},
-            {"R1", "R1",  "S8",  "S9",  "ERR", "R1",  "ERR", "R1",  "ERR", "ERR", "ERR"},
-            {"R2", "R2",  "S8",  "S9",  "ERR", "R2",  "ERR", "R2",  "ERR", "ERR", "ERR"},
-            {"R4", "R4",  "R4",  "R4",  "ERR", "R4",  "ERR", "R4",  "ERR", "ERR", "ERR"},
-            {"R5", "R5",  "R5",  "R5",  "ERR", "R5",  "ERR", "R5",  "ERR", "ERR", "ERR"},
-            {"R7", "R7",  "R7",  "R7",  "ERR", "R7",  "ERR", "R7",  "ERR", "ERR", "ERR"}
+            {"ERR", "ERR", "ERR", "ERR", "S4",  "ERR", "S5",  "ERR", "1",   "2",   "3"},
+            {"S6",  "S7",  "ERR", "ERR", "ERR", "ERR", "ERR", "ACC", "ERR", "ERR", "ERR"},
+            {"R3",  "R3",  "S8",  "S9",  "ERR", "R3",  "ERR", "R3",  "ERR", "ERR", "ERR"},
+            {"R6",  "R6",  "R6",  "R6",  "ERR", "R6",  "ERR", "R6",  "ERR", "ERR", "ERR"},
+            {"ERR", "ERR", "ERR", "ERR", "S4",  "ERR", "S5",  "ERR", "10",  "2",   "3"},
+            {"R8",  "R8",  "R8",  "R8",  "ERR", "R8",  "ERR", "R8",  "ERR", "ERR", "ERR"},
+            {"ERR", "ERR", "ERR", "ERR", "S4",  "ERR", "S5",  "ERR", "ERR", "11",  "3"},
+            {"ERR", "ERR", "ERR", "ERR", "S4",  "ERR", "S5",  "ERR", "ERR", "12",  "3"},
+            {"ERR", "ERR", "ERR", "ERR", "S4",  "ERR", "S5",  "ERR", "ERR", "ERR", "13"},
+            {"ERR", "ERR", "ERR", "ERR", "S4",  "ERR", "S5",  "ERR", "ERR", "ERR", "14"},
+            {"S6",  "S7",  "ERR", "ERR", "ERR", "S15", "ERR", "ERR", "ERR", "ERR", "ERR"},
+            {"R1",  "R1",  "S8",  "S9",  "ERR", "R1",  "ERR", "R1",  "ERR", "ERR", "ERR"},
+            {"R2",  "R2",  "S8",  "S9",  "ERR", "R2",  "ERR", "R2",  "ERR", "ERR", "ERR"},
+            {"R4",  "R4",  "R4",  "R4",  "ERR", "R4",  "ERR", "R4",  "ERR", "ERR", "ERR"},
+            {"R5",  "R5",  "R5",  "R5",  "ERR", "R5",  "ERR", "R5",  "ERR", "ERR", "ERR"},
+            {"R7",  "R7",  "R7",  "R7",  "ERR", "R7",  "ERR", "R7",  "ERR", "ERR", "ERR"}
     };
-    table_coordinate = {{'+',0},{'-',1},{'*',2},{'/',3},{'(',4},{')',5},{'n',6},{'$',7},{'E',8},{'T',9},{'F',10} };
+    table_coordinate = {{'+', 0},
+                        {'-', 1},
+                        {'*', 2},
+                        {'/', 3},
+                        {'(', 4},
+                        {')', 5},
+                        {'n', 6},
+                        {'$', 7},
+                        {'E', 8},
+                        {'T', 9},
+                        {'F', 10}};
 }
 
-void LR_grammer::augmentating_grammer()
+void LR_grammer::augmentating_grammer()//增广文法
 {
     nonterminal[0] = "S";
     deductions[0].left = "S";
     deductions[0].right = "E";
 }
 
-
-void LR_grammer::follow_set()
+void LR_grammer::analyze_program(string text)//LR分析程序
 {
-    for (auto i:nonterminal)
-        follow[i] = get_follow_set(i);
-}
-
-vector<string> LR_grammer::get_follow_set(string to_get_follow)//构建follow集
-{
-    if (!follow[to_get_follow].empty())
-        return follow[to_get_follow];
-    vector<string> mid;
-    vector<string>::iterator it;
-    if (to_get_follow == "S")
+    if (text == "DIGITAL FORMAT ERROR!")//如果字符串中有非法字符或者数字格式不正确，则报错退出分析程序
     {
-        mid.emplace_back("$");
-        return mid;
+        cout << text;
+        return;
     }
-    for (auto i:deductions)
-    {
-        int pos = i.right.find(to_get_follow);
-        if(pos >= 0 && pos != i.right.size() - 1)
-        {
-            string after = i.right.substr(pos+1, 1);
-            for(it = terminal.begin();it != terminal.end();it++)
-            {
-                if(*it == after)
-                {
-                    if(find(mid.begin(), mid.end(), *it) == mid.end())
-                        mid.push_back(after);
-                    break;
-                }
-            }
-            for(it = nonterminal.begin();it != nonterminal.end();it++)
-            {
-                if(*it == after)
-                {
-                    vector<string> temp = get_follow_set(after);
-                    for(it = temp.begin();it != temp.end();it++)
-                    {
-                        if(find(mid.begin(), mid.end(), *it) == mid.end())
-                            mid.push_back(*it);
-                    }
-                    break;
-                }
-            }
-        }
-        else if(pos >= 0 && pos == i.right.size() - 1)
-        {
-            vector<string> temp = get_follow_set(i.left);
-            for(it = temp.begin();it != temp.end();it++)
-            {
-                if(find(mid.begin(), mid.end(), *it) == mid.end())
-                    mid.push_back(*it);
-            }
-        }
-    }
-    return mid;
-}
-
-void LR_grammer::print_test()
-{
-    cout << "---------------------------" << endl;
-    cout << "follow集:" << endl;
-    for (auto i:follow) {
-        cout << i.first << " : ";
-        for (int j = 0; j < i.second.size(); j++)
-            if (j == i.second.size() - 1)
-                cout << i.second[j];
-            else
-                cout << i.second[j] << " , ";
-        cout << endl;
-    }
-}
-
-void LR_grammer::analyze_program(string text)
-{
     text.append("$");
-    stack<char> symble;
-    stack<int> state;
-    state.push(0);
-    symble.push('-');
-    int cur = 0;
-    int s;
-    char a;
-
-    do{
-        s = state.top();
-        a = text[cur];
-        if(analyze_table[s][table_coordinate[a]][0] == 'S')
+    stack<char> symble;//符号栈
+    stack<int> state;//状态栈
+    state.push(0);//开始时把0状态压入状态栈顶
+    symble.push('-');//开始时把‘-’压入符号栈顶
+    int cur = 0;//当前字符在字符串中的位置
+    int s;//当前状态
+    char a;//当前字符
+//------------输出格式初始化------------------------------------
+    cout << "-----------------------------------------------------------------------------------------" << endl;
+    cout << setiosflags(ios::left) << setw(40) << "栈" << setw(20) << "输入" << setw(22) << resetiosflags(ios::left)
+         << "分析动作" << endl;
+    cout << "-----------------------------------------------------------------------------------------" << endl;
+    string state_print = "State:  0  ";
+    string symble_print = "Symble: -  ";
+    string input_print = text;
+//---------------------------------------------------------
+    do
+    {
+        s = state.top();//令s为栈顶状态
+        a = text[cur];//a为当前字符
+        if (analyze_table[s][table_coordinate[a]][0] == 'S')//如果动作为移进
         {
+            //把a和s分别压入状态栈和符号栈顶
             symble.push(a);
-            string temp_str = analyze_table[s][table_coordinate[a]].substr(1,analyze_table[s][table_coordinate[a]].size() - 1);
+            string temp_str = analyze_table[s][table_coordinate[a]].substr(1,
+                                                                           analyze_table[s][table_coordinate[a]].size() -
+                                                                           1);
             int temp_int = atoi(temp_str.c_str());
             state.push(temp_int);
-            cur++;
-            cout << "Shift " << state.top() << endl;
+            cur++;//指向下一输入符号
+            //输出格式制定
+            cout << setiosflags(ios::left) << setw(40) << state_print << setw(20) << input_print << setw(20)
+                 << resetiosflags(ios::left) << "Shift " << state.top() << endl;
+            cout << setiosflags(ios::left) << setw(40) << symble_print << resetiosflags(ios::left) << endl << endl;
+            if (state.top() >= 10)
+                state_print += to_string(state.top()) + " ";
+            else
+                state_print += to_string(state.top()) + "  ";
+            symble_print += a;
+            symble_print.append("  ");
+            input_print = input_print.substr(1, input_print.size() - 1);
         }
-        else if(analyze_table[s][table_coordinate[a]][0] == 'R')
+        else if (analyze_table[s][table_coordinate[a]][0] == 'R')//如果动作为归约
         {
             DEDUCTION temp_dec = deductions[analyze_table[s][table_coordinate[a]][1] - '0'];
+            //输出格式制定
+            cout << setiosflags(ios::left) << setw(40) << state_print << setw(20) << input_print << setw(20)
+                 << resetiosflags(ios::left) << "reduce by " << temp_dec.left << " -> " << temp_dec.right << endl;
+            cout << setiosflags(ios::left) << setw(40) << symble_print << resetiosflags(ios::left) << endl << endl;
             int length = temp_dec.right.size();
-            while(length--)
+            //栈顶弹出归约产生式右部长度个符号
+            while (length--)
             {
                 symble.pop();
                 state.pop();
+                symble_print = symble_print.substr(0, symble_print.size() - 3);
+                state_print = state_print.substr(0, state_print.size() - 3);
             }
             int top = state.top();
+            //将归约产生式左部符号压入符号栈，goto[S',A]压入状态栈顶
             symble.push(temp_dec.left[0]);
             string temp_str = analyze_table[top][table_coordinate[symble.top()]];
             int temp_int = atoi(temp_str.c_str());
             state.push(temp_int);
-            cout << "reduce by " << temp_dec.left << " -> " << temp_dec.right << endl;
+            //输出格式制定
+            if (temp_int >= 10)
+                state_print += to_string(temp_int) + " ";
+            else
+                state_print += to_string(temp_int) + "  ";
+            symble_print += temp_dec.left;
+            symble_print.append("  ");
         }
-        else if(analyze_table[s][table_coordinate[a]] == "ACC")
+        else if (analyze_table[s][table_coordinate[a]] == "ACC")//如果动作为接受
         {
-            cout << "SUCCESS!" << endl;
+            cout << setiosflags(ios::left) << setw(40) << state_print << setw(20) << input_print << setw(21)
+                 << resetiosflags(ios::left) << "SUCCESS!" << endl;
+            cout << setiosflags(ios::left) << setw(40) << symble_print << resetiosflags(ios::left) << endl;
+            cout << "-----------------------------------------------------------------------------------------" << endl;
             return;
         }
-
         else
         {
             cout << "ERROR!" << endl;
+            cout << "-----------------------------------------------------------------------------------------" << endl;
             return;
         }
-    }while(1);
+    } while (true);
 }
 
-string LR_grammer::text_process(string text)
+string LR_grammer::text_process(string text)//处理输入文本
 {
     int cur = 0;
     int length = text.size();
     int state = 0;
     string after;
-    while(length--)
+    while (length--)
     {
-        if(text[cur] > '0' && text[cur] < '9')
+        if (text[cur] > '0' && text[cur] < '9')//如果当前字符为数字
         {
-            if(state == 0)
+            if (state == 0)
             {
                 after += 'n';
                 state = 1;
             }
-            else if(state == 3 || state == 4)
+            else if (state == 3 || state == 4)
                 state = 5;
             cur++;
         }
-        else if(text[cur] == '.')
+        else if (text[cur] == '.')//如果当前字符为‘.’
         {
-            if(state == 1)
+            if (state == 1)
                 state = 2;
             else
-                return "NUMBER ERROR";
+                return "DIGITAL FORMAT ERROR!";//返回数字格式错误
             cur++;
         }
-        else if(text[cur] == 'e' || text[cur] == 'E')
+        else if (text[cur] == 'e' || text[cur] == 'E')//如果当前字符为e或E
         {
-            if(state == 1 || state == 2)
+            if (state == 1 || state == 2)
                 state = 3;
             else
-                return "NUMBER ERROR";
+                return "DIGITAL FORMAT ERROR!";//返回数字格式错误
             cur++;
         }
-        else if(text[cur] == '+' || text[cur] == '-')
+        else if (text[cur] == '+' || text[cur] == '-')//如果当前字符为+或-
         {
-            if(state == 3)
+            if (state == 3)
                 state = 4;
             else
             {
@@ -243,14 +222,14 @@ string LR_grammer::text_process(string text)
             }
             cur++;
         }
-        else if(text[cur] == '*' || text[cur] == '/' || text[cur] == '(' || text[cur] == ')')
+        else if (text[cur] == '*' || text[cur] == '/' || text[cur] == '(' || text[cur] == ')')//如果当前字符为*、(或)
         {
             after += text[cur];
             state = 0;
             cur++;
         }
         else
-            return "NUMBER ERROR";
+            return "DIGITAL FORMAT ERROR!";//返回数字格式错误
     }
     return after;
 }
