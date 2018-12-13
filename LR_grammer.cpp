@@ -166,13 +166,13 @@ void LR_grammer::analyze_program(string text, vector<double> number)//LR分析程序
     }
     text.append("$");
 
-    stack<pair<char, double>> symble;//符号栈
+    vector<pair<char, double>> symble;//符号栈
     stack<int> state;//状态栈
     state.push(0);//开始时把0状态压入状态栈顶
     pair<char, double> p;
     p.first = '-';
     p.second = 0;
-    symble.push(p);//开始时把<‘-’,0>压入符号栈顶
+    symble.push_back(p);//开始时把<‘-’,0>压入符号栈顶
 
     int cur_number = 0;//当前读入的数字
     int cur = 0;//当前字符在字符串中的位置
@@ -199,7 +199,7 @@ void LR_grammer::analyze_program(string text, vector<double> number)//LR分析程序
                 p.second = number[cur_number++];
             else
                 p.second = 0;
-            symble.push(p);
+            symble.push_back(p);
             string temp_str = analyze_table[s][table_coordinate[a]].substr(1,
                                                                            analyze_table[s][table_coordinate[a]].size() -
                                                                            1);
@@ -225,74 +225,73 @@ void LR_grammer::analyze_program(string text, vector<double> number)//LR分析程序
             //------------------输出格式制定-------------------------------------------------
             cout << setiosflags(ios::left) << setw(40) << state_print << setw(20) << input_print << setw(20)
                  << resetiosflags(ios::left) << "reduce by " << temp_dec.left << " -> " << temp_dec.right << endl;
-            cout << setiosflags(ios::left) << setw(40) << symble_print << resetiosflags(ios::left) << endl << endl;
+            cout << setiosflags(ios::left) << setw(40) << symble_print << setw(20) << " " << setw(20) << resetiosflags(ios::left);
             //------------------------------------------------------------------------------
             int length = temp_dec.right.size();
             //栈顶弹出归约产生式右部长度个符号
             double num_temp = 0;
-            int flag = 0;
             if (length == 1)//如果产生式右部长度为1，那么直接弹出符号栈和状态栈栈顶，并储存原栈顶值，之后作为综合属性传递给新栈顶的综合属性
             {
                 while (length--)
                 {
-                    num_temp = symble.top().second;
-                    symble.pop();
+                    num_temp = symble.back().second;
+                    symble.pop_back();
                     state.pop();
                     symble_print = symble_print.substr(0, symble_print.size() - 3);
                     state_print = state_print.substr(0, state_print.size() - 3);
                 }
+                cout << "          val[newtop] = val[top]" << endl << endl;
             }
             else//如果产生式右部长度为3，那么除了弹出三次符号栈和状态栈栈顶外，还要根据产生式对应的翻译方案计算并储存值，
-                //为了实现一遍扫描就能同时得到LR预测分析结果和翻译结果，故采用“逆序”识别右产生式的顺序
+                //由于产生式已知且翻译方案不含继承属性，所以归约时栈中非终结符位置已知，只需根据翻译方案进行运算操作即可，
+                //将结果传递给新栈顶的综合属性
             {
+                int top = symble.size()-1;
+                if(symble[top].first != ')')
+                {
+                    if(symble[top-1].first == '+')
+                    {
+                        num_temp = symble[top-2].second + symble[top].second;
+                        cout << "          val[newtop] = val[top-2] + val[top]" << endl << endl;
+                    }
+                    else if(symble[top-1].first == '-')
+                    {
+                        num_temp = symble[top-2].second - symble[top].second;
+                        cout << "          val[newtop] = val[top-2] - val[top]" << endl << endl;
+                    }
+
+                    else if(symble[top-1].first == '*')
+                    {
+                        num_temp = symble[top-2].second * symble[top].second;
+                        cout << "          val[newtop] = val[top-2] * val[top]" << endl << endl;
+                    }
+
+                    else if(symble[top-1].first == '/')
+                    {
+                        num_temp = symble[top-2].second / symble[top].second;
+                        cout << "          val[newtop] = val[top-2] / val[top]" << endl << endl;
+                    }
+                }
+                else
+                {
+                    num_temp = symble[top-1].second;
+                    cout << " " << endl << endl;
+                }
+
                 while (length--)
                 {
-                    if (symble.top().first == '+')
-                        flag = 1;
-                    else if (symble.top().first == '-')
-                        flag = 2;
-                    else if (symble.top().first == '*')
-                        flag = 3;
-                    else if (symble.top().first == '/')
-                        flag = 4;
-                    else if (symble.top().first == ')')
-                        flag = 5;
-
-                    if (symble.top().first != '+' &&
-                        symble.top().first != '-' &&
-                        symble.top().first != '*' &&
-                        symble.top().first != '/' &&
-                        symble.top().first != ')')
-                    {
-                        if (flag == 0)
-                            num_temp = symble.top().second;
-                        else if (flag == 1)
-                            num_temp += symble.top().second;
-                        else if (flag == 2)
-                            num_temp = symble.top().second - num_temp;
-                        else if (flag == 3)
-                            num_temp *= symble.top().second;
-                        else if (flag == 4)
-                            num_temp = symble.top().second / num_temp;
-                        else if (flag == 5)
-                        {
-                            num_temp = symble.top().second;
-                            flag = 6;
-                        }
-                    }
-                    symble.pop();
+                    symble.pop_back();
                     state.pop();
                     symble_print = symble_print.substr(0, symble_print.size() - 3);
                     state_print = state_print.substr(0, state_print.size() - 3);
                 }
             }
-            int top = state.top();
             //将归约产生式左部符号压入符号栈，goto[S',A]压入状态栈顶
             p.first = temp_dec.left[0];
             p.second = num_temp;
-            symble.push(p);
-            cout << "当前栈顶值为:" << symble.top().second << endl;
-            string temp_str = analyze_table[top][table_coordinate[symble.top().first]];
+            symble.push_back(p);
+            cout << "当前栈顶值为:" << symble.back().second  << endl;
+            string temp_str = analyze_table[state.top()][table_coordinate[symble.back().first]];
             int temp_int = atoi(temp_str.c_str());
             state.push(temp_int);
             //------------------输出格式制定-------------------------------------------------
@@ -307,11 +306,11 @@ void LR_grammer::analyze_program(string text, vector<double> number)//LR分析程序
         else if (analyze_table[s][table_coordinate[a]] == "ACC")//如果动作为接受
         {
             //------------------输出格式制定-------------------------------------------------
-            cout << setiosflags(ios::left) << setw(40) << state_print << setw(20) << input_print << setw(21)
+            cout << setiosflags(ios::left) << setw(40) << state_print << setw(20) << input_print << setw(20)
                  << resetiosflags(ios::left) << "SUCCESS!" << endl;
-            cout << setiosflags(ios::left) << setw(40) << symble_print << resetiosflags(ios::left) << endl;
+            cout << setiosflags(ios::left) << setw(40) << symble_print << setw(20) << " " << setw(20) << resetiosflags(ios::left) << "          print{val[top]}" << endl;
             cout << "-----------------------------------------------------------------------------------------" << endl;
-            cout << "计算值为:" << symble.top().second << endl;
+            cout << "计算值为:" << symble.back().second << endl;
             //------------------------------------------------------------------------------
             return;
         }
