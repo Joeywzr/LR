@@ -38,7 +38,11 @@ public:
     //LR分析程序
     void analyze_program(string text);
     //处理输入文本
-    string text_process(string text);
+    string text_process(string text, vector<int> &number);
+
+    string text_process1(string text, vector<double> &number);
+
+    void analyze_program1(string text, vector<double> number);
 };
 
 #endif //LR_LR_GRAMMER_H
