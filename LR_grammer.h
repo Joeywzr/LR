@@ -4,6 +4,7 @@
 
 #ifndef LR_LR_GRAMMER_H
 #define LR_LR_GRAMMER_H
+
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -12,13 +13,15 @@
 #include <string>
 #include <iomanip>
 #include <stack>
+
 using namespace std;
 
 typedef struct DEDUCTION
 {
-    string left;
-    string right;
+    string left;//左产生式
+    string right;//右产生式
 } DEDUCTION;
+
 class LR_grammer
 {
     //产生式
@@ -33,16 +36,15 @@ class LR_grammer
 public:
     //初始化
     void init(DEDUCTION &dd);
+
     //增广文法
     void augmentating_grammer();
+
     //LR分析程序
-    void analyze_program(string text);
+    void analyze_program(string text, vector<double> number);
+
     //处理输入文本
-    string text_process(string text, vector<int> &number);
-
-    string text_process1(string text, vector<double> &number);
-
-    void analyze_program1(string text, vector<double> number);
+    string text_process(string text, vector<double> &number);
 };
 
 #endif //LR_LR_GRAMMER_H

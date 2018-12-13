@@ -42,22 +42,22 @@ void LR_grammer::init(DEDUCTION &dd)//³õÊ¼»¯
     deductions.push_back(dd);
 
     analyze_table = {
-            {"ERR", "ERR", "ERR", "ERR", "S4",  "ERR", "S5",  "ERR", "1",   "2",   "3"},
-            {"S6",  "S7",  "ERR", "ERR", "ERR", "ERR", "ERR", "ACC", "ERR", "ERR", "ERR"},
-            {"R3",  "R3",  "S8",  "S9",  "ERR", "R3",  "ERR", "R3",  "ERR", "ERR", "ERR"},
-            {"R6",  "R6",  "R6",  "R6",  "ERR", "R6",  "ERR", "R6",  "ERR", "ERR", "ERR"},
-            {"ERR", "ERR", "ERR", "ERR", "S4",  "ERR", "S5",  "ERR", "10",  "2",   "3"},
-            {"R8",  "R8",  "R8",  "R8",  "ERR", "R8",  "ERR", "R8",  "ERR", "ERR", "ERR"},
-            {"ERR", "ERR", "ERR", "ERR", "S4",  "ERR", "S5",  "ERR", "ERR", "11",  "3"},
-            {"ERR", "ERR", "ERR", "ERR", "S4",  "ERR", "S5",  "ERR", "ERR", "12",  "3"},
-            {"ERR", "ERR", "ERR", "ERR", "S4",  "ERR", "S5",  "ERR", "ERR", "ERR", "13"},
-            {"ERR", "ERR", "ERR", "ERR", "S4",  "ERR", "S5",  "ERR", "ERR", "ERR", "14"},
-            {"S6",  "S7",  "ERR", "ERR", "ERR", "S15", "ERR", "ERR", "ERR", "ERR", "ERR"},
-            {"R1",  "R1",  "S8",  "S9",  "ERR", "R1",  "ERR", "R1",  "ERR", "ERR", "ERR"},
-            {"R2",  "R2",  "S8",  "S9",  "ERR", "R2",  "ERR", "R2",  "ERR", "ERR", "ERR"},
-            {"R4",  "R4",  "R4",  "R4",  "ERR", "R4",  "ERR", "R4",  "ERR", "ERR", "ERR"},
-            {"R5",  "R5",  "R5",  "R5",  "ERR", "R5",  "ERR", "R5",  "ERR", "ERR", "ERR"},
-            {"R7",  "R7",  "R7",  "R7",  "ERR", "R7",  "ERR", "R7",  "ERR", "ERR", "ERR"}
+            {"ERROR", "ERROR", "ERROR", "ERROR", "S4",    "ERROR", "S5",    "ERROR", "1",     "2",     "3"},
+            {"S6",    "S7",    "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ACC",   "ERROR", "ERROR", "ERROR"},
+            {"R3",    "R3",    "S8",    "S9",    "ERROR", "R3",    "ERROR", "R3",    "ERROR", "ERROR", "ERROR"},
+            {"R6",    "R6",    "R6",    "R6",    "ERROR", "R6",    "ERROR", "R6",    "ERROR", "ERROR", "ERROR"},
+            {"ERROR", "ERROR", "ERROR", "ERROR", "S4",    "ERROR", "S5",    "ERROR", "10",    "2",     "3"},
+            {"R8",    "R8",    "R8",    "R8",    "ERROR", "R8",    "ERROR", "R8",    "ERROR", "ERROR", "ERROR"},
+            {"ERROR", "ERROR", "ERROR", "ERROR", "S4",    "ERROR", "S5",    "ERROR", "ERROR", "11",    "3"},
+            {"ERROR", "ERROR", "ERROR", "ERROR", "S4",    "ERROR", "S5",    "ERROR", "ERROR", "12",    "3"},
+            {"ERROR", "ERROR", "ERROR", "ERROR", "S4",    "ERROR", "S5",    "ERROR", "ERROR", "ERROR", "13"},
+            {"ERROR", "ERROR", "ERROR", "ERROR", "S4",    "ERROR", "S5",    "ERROR", "ERROR", "ERROR", "14"},
+            {"S6",    "S7",    "ERROR", "ERROR", "ERROR", "S15",   "ERROR", "ERROR", "ERROR", "ERROR", "ERROR"},
+            {"R1",    "R1",    "S8",    "S9",    "ERROR", "R1",    "ERROR", "R1",    "ERROR", "ERROR", "ERROR"},
+            {"R2",    "R2",    "S8",    "S9",    "ERROR", "R2",    "ERROR", "R2",    "ERROR", "ERROR", "ERROR"},
+            {"R4",    "R4",    "R4",    "R4",    "ERROR", "R4",    "ERROR", "R4",    "ERROR", "ERROR", "ERROR"},
+            {"R5",    "R5",    "R5",    "R5",    "ERROR", "R5",    "ERROR", "R5",    "ERROR", "ERROR", "ERROR"},
+            {"R7",    "R7",    "R7",    "R7",    "ERROR", "R7",    "ERROR", "R7",    "ERROR", "ERROR", "ERROR"}
     };
     table_coordinate = {{'+', 0},
                         {'-', 1},
@@ -79,162 +79,7 @@ void LR_grammer::augmentating_grammer()//Ôö¹ãÎÄ·¨
     deductions[0].right = "E";
 }
 
-void LR_grammer::analyze_program(string text)//LR·ÖÎö³ÌÐò
-{
-    if (text == "DIGITAL FORMAT ERROR!")//Èç¹û×Ö·û´®ÖÐÓÐ·Ç·¨×Ö·û»òÕßÊý×Ö¸ñÊ½²»ÕýÈ·£¬Ôò±¨´íÍË³ö·ÖÎö³ÌÐò
-    {
-        cout << text;
-        return;
-    }
-    text.append("$");
-    stack<char> symble;//·ûºÅÕ»
-    stack<int> state;//×´Ì¬Õ»
-    state.push(0);//¿ªÊ¼Ê±°Ñ0×´Ì¬Ñ¹Èë×´Ì¬Õ»¶¥
-    symble.push('-');//¿ªÊ¼Ê±°Ñ¡®-¡¯Ñ¹Èë·ûºÅÕ»¶¥
-    int cur = 0;//µ±Ç°×Ö·ûÔÚ×Ö·û´®ÖÐµÄÎ»ÖÃ
-    int s;//µ±Ç°×´Ì¬
-    char a;//µ±Ç°×Ö·û
-//------------Êä³ö¸ñÊ½³õÊ¼»¯------------------------------------
-    cout << "-----------------------------------------------------------------------------------------" << endl;
-    cout << setiosflags(ios::left) << setw(40) << "Õ»" << setw(20) << "ÊäÈë" << setw(22) << resetiosflags(ios::left)
-         << "·ÖÎö¶¯×÷" << endl;
-    cout << "-----------------------------------------------------------------------------------------" << endl;
-    string state_print = "State:  0  ";
-    string symble_print = "Symble: -  ";
-    string input_print = text;
-//---------------------------------------------------------
-    do
-    {
-        s = state.top();//ÁîsÎªÕ»¶¥×´Ì¬
-        a = text[cur];//aÎªµ±Ç°×Ö·û
-        if (analyze_table[s][table_coordinate[a]][0] == 'S')//Èç¹û¶¯×÷ÎªÒÆ½ø
-        {
-            //°ÑaºÍs·Ö±ðÑ¹Èë×´Ì¬Õ»ºÍ·ûºÅÕ»¶¥
-            symble.push(a);
-            string temp_str = analyze_table[s][table_coordinate[a]].substr(1,
-                                                                           analyze_table[s][table_coordinate[a]].size() -
-                                                                           1);
-            int temp_int = atoi(temp_str.c_str());
-            state.push(temp_int);
-            cur++;//Ö¸ÏòÏÂÒ»ÊäÈë·ûºÅ
-            //Êä³ö¸ñÊ½ÖÆ¶¨
-            cout << setiosflags(ios::left) << setw(40) << state_print << setw(20) << input_print << setw(20)
-                 << resetiosflags(ios::left) << "Shift " << state.top() << endl;
-            cout << setiosflags(ios::left) << setw(40) << symble_print << resetiosflags(ios::left) << endl << endl;
-            if (state.top() >= 10)
-                state_print += to_string(state.top()) + " ";
-            else
-                state_print += to_string(state.top()) + "  ";
-            symble_print += a;
-            symble_print.append("  ");
-            input_print = input_print.substr(1, input_print.size() - 1);
-        }
-        else if (analyze_table[s][table_coordinate[a]][0] == 'R')//Èç¹û¶¯×÷Îª¹éÔ¼
-        {
-            DEDUCTION temp_dec = deductions[analyze_table[s][table_coordinate[a]][1] - '0'];
-            //Êä³ö¸ñÊ½ÖÆ¶¨
-            cout << setiosflags(ios::left) << setw(40) << state_print << setw(20) << input_print << setw(20)
-                 << resetiosflags(ios::left) << "reduce by " << temp_dec.left << " -> " << temp_dec.right << endl;
-            cout << setiosflags(ios::left) << setw(40) << symble_print << resetiosflags(ios::left) << endl << endl;
-            int length = temp_dec.right.size();
-            //Õ»¶¥µ¯³ö¹éÔ¼²úÉúÊ½ÓÒ²¿³¤¶È¸ö·ûºÅ
-            while (length--)
-            {
-                symble.pop();
-                state.pop();
-                symble_print = symble_print.substr(0, symble_print.size() - 3);
-                state_print = state_print.substr(0, state_print.size() - 3);
-            }
-            int top = state.top();
-            //½«¹éÔ¼²úÉúÊ½×ó²¿·ûºÅÑ¹Èë·ûºÅÕ»£¬goto[S',A]Ñ¹Èë×´Ì¬Õ»¶¥
-            symble.push(temp_dec.left[0]);
-            string temp_str = analyze_table[top][table_coordinate[symble.top()]];
-            int temp_int = atoi(temp_str.c_str());
-            state.push(temp_int);
-            //Êä³ö¸ñÊ½ÖÆ¶¨
-            if (temp_int >= 10)
-                state_print += to_string(temp_int) + " ";
-            else
-                state_print += to_string(temp_int) + "  ";
-            symble_print += temp_dec.left;
-            symble_print.append("  ");
-        }
-        else if (analyze_table[s][table_coordinate[a]] == "ACC")//Èç¹û¶¯×÷Îª½ÓÊÜ
-        {
-            cout << setiosflags(ios::left) << setw(40) << state_print << setw(20) << input_print << setw(21)
-                 << resetiosflags(ios::left) << "SUCCESS!" << endl;
-            cout << setiosflags(ios::left) << setw(40) << symble_print << resetiosflags(ios::left) << endl;
-            cout << "-----------------------------------------------------------------------------------------" << endl;
-            return;
-        }
-        else
-        {
-            cout << "ERROR!" << endl;
-            cout << "-----------------------------------------------------------------------------------------" << endl;
-            return;
-        }
-    } while (true);
-}
-
-string LR_grammer::text_process(string text, vector<int> &number)//´¦ÀíÊäÈëÎÄ±¾
-{
-    int cur = 0;
-    int length = text.size();
-    int state = 0;
-    string after;
-    while (length--)
-    {
-        if (text[cur] > '0' && text[cur] < '9')//Èç¹ûµ±Ç°×Ö·ûÎªÊý×Ö
-        {
-            if (state == 0)
-            {
-                after += 'n';
-                state = 1;
-            }
-            else if (state == 3 || state == 4)
-                state = 5;
-            cur++;
-        }
-        else if (text[cur] == '.')//Èç¹ûµ±Ç°×Ö·ûÎª¡®.¡¯
-        {
-            if (state == 1)
-                state = 2;
-            else
-                return "DIGITAL FORMAT ERROR!";//·µ»ØÊý×Ö¸ñÊ½´íÎó
-            cur++;
-        }
-        else if (text[cur] == 'e' || text[cur] == 'E')//Èç¹ûµ±Ç°×Ö·ûÎªe»òE
-        {
-            if (state == 1 || state == 2)
-                state = 3;
-            else
-                return "DIGITAL FORMAT ERROR!";//·µ»ØÊý×Ö¸ñÊ½´íÎó
-            cur++;
-        }
-        else if (text[cur] == '+' || text[cur] == '-')//Èç¹ûµ±Ç°×Ö·ûÎª+»ò-
-        {
-            if (state == 3)
-                state = 4;
-            else
-            {
-                after += text[cur];
-                state = 0;
-            }
-            cur++;
-        }
-        else if (text[cur] == '*' || text[cur] == '/' || text[cur] == '(' || text[cur] == ')')//Èç¹ûµ±Ç°×Ö·ûÎª*¡¢(»ò)
-        {
-            after += text[cur];
-            state = 0;
-            cur++;
-        }
-        else
-            return "DIGITAL FORMAT ERROR!";//·µ»ØÊý×Ö¸ñÊ½´íÎó
-    }
-    return after;
-}
-
-string LR_grammer::text_process1(string text, vector<double> &number)//´¦ÀíÊäÈëÎÄ±¾
+string LR_grammer::text_process(string text, vector<double> &number)//´¦ÀíÊäÈëÎÄ±¾
 {
     int cur = 0;
     int length = text.size();
@@ -294,7 +139,7 @@ string LR_grammer::text_process1(string text, vector<double> &number)//´¦ÀíÊäÈëÎ
         else if (text[cur] == '*' || text[cur] == '/' || text[cur] == '(' || text[cur] == ')')//Èç¹ûµ±Ç°×Ö·ûÎª*¡¢(»ò)
         {
             after += text[cur];
-            if(text[cur] == '*' || text[cur] == '/')
+            if (text[cur] == '*' || text[cur] == '/')
             {
                 temp = atof(to_num.c_str());
                 number.push_back(temp);
@@ -312,22 +157,24 @@ string LR_grammer::text_process1(string text, vector<double> &number)//´¦ÀíÊäÈëÎ
     return after;
 }
 
-void LR_grammer::analyze_program1(string text, vector<double> number)//LR·ÖÎö³ÌÐò
+void LR_grammer::analyze_program(string text, vector<double> number)//LR·ÖÎö³ÌÐò
 {
     if (text == "DIGITAL FORMAT ERROR!")//Èç¹û×Ö·û´®ÖÐÓÐ·Ç·¨×Ö·û»òÕßÊý×Ö¸ñÊ½²»ÕýÈ·£¬Ôò±¨´íÍË³ö·ÖÎö³ÌÐò
     {
         cout << text;
         return;
     }
-    int cur_number = 0;
-    pair<char,double> p;
     text.append("$");
+
     stack<pair<char, double>> symble;//·ûºÅÕ»
     stack<int> state;//×´Ì¬Õ»
     state.push(0);//¿ªÊ¼Ê±°Ñ0×´Ì¬Ñ¹Èë×´Ì¬Õ»¶¥
+    pair<char, double> p;
     p.first = '-';
     p.second = 0;
     symble.push(p);//¿ªÊ¼Ê±°Ñ<¡®-¡¯,0>Ñ¹Èë·ûºÅÕ»¶¥
+
+    int cur_number = 0;//µ±Ç°¶ÁÈëµÄÊý×Ö
     int cur = 0;//µ±Ç°×Ö·ûÔÚ×Ö·û´®ÖÐµÄÎ»ÖÃ
     int s;//µ±Ç°×´Ì¬
     char a;//µ±Ç°×Ö·û
@@ -348,7 +195,7 @@ void LR_grammer::analyze_program1(string text, vector<double> number)//LR·ÖÎö³ÌÐ
         {
             //°ÑaºÍs·Ö±ðÑ¹Èë×´Ì¬Õ»ºÍ·ûºÅÕ»¶¥
             p.first = a;
-            if(a == 'n')
+            if (a == 'n')
                 p.second = number[cur_number++];
             else
                 p.second = 0;
@@ -359,7 +206,7 @@ void LR_grammer::analyze_program1(string text, vector<double> number)//LR·ÖÎö³ÌÐ
             int temp_int = atoi(temp_str.c_str());
             state.push(temp_int);
             cur++;//Ö¸ÏòÏÂÒ»ÊäÈë·ûºÅ
-            //Êä³ö¸ñÊ½ÖÆ¶¨
+            //------------------Êä³ö¸ñÊ½ÖÆ¶¨-------------------------------------------------
             cout << setiosflags(ios::left) << setw(40) << state_print << setw(20) << input_print << setw(20)
                  << resetiosflags(ios::left) << "Shift " << state.top() << endl;
             cout << setiosflags(ios::left) << setw(40) << symble_print << resetiosflags(ios::left) << endl << endl;
@@ -370,19 +217,21 @@ void LR_grammer::analyze_program1(string text, vector<double> number)//LR·ÖÎö³ÌÐ
             symble_print += a;
             symble_print.append("  ");
             input_print = input_print.substr(1, input_print.size() - 1);
+            //------------------------------------------------------------------------------
         }
         else if (analyze_table[s][table_coordinate[a]][0] == 'R')//Èç¹û¶¯×÷Îª¹éÔ¼
         {
             DEDUCTION temp_dec = deductions[analyze_table[s][table_coordinate[a]][1] - '0'];
-            //Êä³ö¸ñÊ½ÖÆ¶¨
+            //------------------Êä³ö¸ñÊ½ÖÆ¶¨-------------------------------------------------
             cout << setiosflags(ios::left) << setw(40) << state_print << setw(20) << input_print << setw(20)
                  << resetiosflags(ios::left) << "reduce by " << temp_dec.left << " -> " << temp_dec.right << endl;
             cout << setiosflags(ios::left) << setw(40) << symble_print << resetiosflags(ios::left) << endl << endl;
+            //------------------------------------------------------------------------------
             int length = temp_dec.right.size();
             //Õ»¶¥µ¯³ö¹éÔ¼²úÉúÊ½ÓÒ²¿³¤¶È¸ö·ûºÅ
             double num_temp = 0;
             int flag = 0;
-            if(length == 1)
+            if (length == 1)//Èç¹û²úÉúÊ½ÓÒ²¿³¤¶ÈÎª1£¬ÄÇÃ´Ö±½Óµ¯³ö·ûºÅÕ»ºÍ×´Ì¬Õ»Õ»¶¥£¬²¢´¢´æÔ­Õ»¶¥Öµ£¬Ö®ºó×÷Îª×ÛºÏÊôÐÔ´«µÝ¸øÐÂÕ»¶¥µÄ×ÛºÏÊôÐÔ
             {
                 while (length--)
                 {
@@ -393,38 +242,39 @@ void LR_grammer::analyze_program1(string text, vector<double> number)//LR·ÖÎö³ÌÐ
                     state_print = state_print.substr(0, state_print.size() - 3);
                 }
             }
-            else
+            else//Èç¹û²úÉúÊ½ÓÒ²¿³¤¶ÈÎª3£¬ÄÇÃ´³ýÁËµ¯³öÈý´Î·ûºÅÕ»ºÍ×´Ì¬Õ»Õ»¶¥Íâ£¬»¹Òª¸ù¾Ý²úÉúÊ½¶ÔÓ¦µÄ·­Òë·½°¸¼ÆËã²¢´¢´æÖµ£¬
+                //ÎªÁËÊµÏÖÒ»±éÉ¨Ãè¾ÍÄÜÍ¬Ê±µÃµ½LRÔ¤²â·ÖÎö½á¹ûºÍ·­Òë½á¹û£¬¹Ê²ÉÓÃ¡°ÄæÐò¡±Ê¶±ðÓÒ²úÉúÊ½µÄË³Ðò
             {
                 while (length--)
                 {
-                    if(symble.top().first == '+')
+                    if (symble.top().first == '+')
                         flag = 1;
-                    else if(symble.top().first == '-')
+                    else if (symble.top().first == '-')
                         flag = 2;
-                    else if(symble.top().first == '*')
+                    else if (symble.top().first == '*')
                         flag = 3;
-                    else if(symble.top().first == '/')
+                    else if (symble.top().first == '/')
                         flag = 4;
-                    else if(symble.top().first == ')')
+                    else if (symble.top().first == ')')
                         flag = 5;
 
-                    if(symble.top().first != '+' &&
-                            symble.top().first != '-' &&
-                            symble.top().first != '*' &&
-                            symble.top().first != '/' &&
-                            symble.top().first != ')')
+                    if (symble.top().first != '+' &&
+                        symble.top().first != '-' &&
+                        symble.top().first != '*' &&
+                        symble.top().first != '/' &&
+                        symble.top().first != ')')
                     {
-                        if(flag == 0)
+                        if (flag == 0)
                             num_temp = symble.top().second;
-                        else if(flag == 1)
+                        else if (flag == 1)
                             num_temp += symble.top().second;
-                        else if(flag == 2)
+                        else if (flag == 2)
                             num_temp = symble.top().second - num_temp;
-                        else if(flag == 3)
+                        else if (flag == 3)
                             num_temp *= symble.top().second;
-                        else if(flag == 4)
+                        else if (flag == 4)
                             num_temp = symble.top().second / num_temp;
-                        else if(flag == 5)
+                        else if (flag == 5)
                         {
                             num_temp = symble.top().second;
                             flag = 6;
@@ -445,24 +295,27 @@ void LR_grammer::analyze_program1(string text, vector<double> number)//LR·ÖÎö³ÌÐ
             string temp_str = analyze_table[top][table_coordinate[symble.top().first]];
             int temp_int = atoi(temp_str.c_str());
             state.push(temp_int);
-            //Êä³ö¸ñÊ½ÖÆ¶¨
+            //------------------Êä³ö¸ñÊ½ÖÆ¶¨-------------------------------------------------
             if (temp_int >= 10)
                 state_print += to_string(temp_int) + " ";
             else
                 state_print += to_string(temp_int) + "  ";
             symble_print += temp_dec.left;
             symble_print.append("  ");
+            //------------------------------------------------------------------------------
         }
         else if (analyze_table[s][table_coordinate[a]] == "ACC")//Èç¹û¶¯×÷Îª½ÓÊÜ
         {
+            //------------------Êä³ö¸ñÊ½ÖÆ¶¨-------------------------------------------------
             cout << setiosflags(ios::left) << setw(40) << state_print << setw(20) << input_print << setw(21)
                  << resetiosflags(ios::left) << "SUCCESS!" << endl;
             cout << setiosflags(ios::left) << setw(40) << symble_print << resetiosflags(ios::left) << endl;
             cout << "-----------------------------------------------------------------------------------------" << endl;
             cout << "¼ÆËãÖµÎª:" << symble.top().second << endl;
+            //------------------------------------------------------------------------------
             return;
         }
-        else
+        else//ÈôLR·ÖÎö±íÖÐÎÞ¶ÔÓ¦¶¯×÷£¬Ôò±¨´íÍË³ö³ÌÐò
         {
             cout << "ERROR!" << endl;
             cout << "-----------------------------------------------------------------------------------------" << endl;

@@ -14,9 +14,9 @@ int main()
     cin >> text;
     while (text != "#")
     {
-        vector<double> number;
-        text = lr.text_process1(text, number);//处理字符串
-        lr.analyze_program1(text, number);//LR分析程序
+        vector<double> number;//用来存输入字符串中的数字
+        text = lr.text_process(text, number);//处理字符串
+        lr.analyze_program(text, number);//LR分析程序
         cout << "\n\n请输入待预测字符串(输入#退出程序)：" << endl;
         cin >> text;
     }
